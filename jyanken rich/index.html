@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="css/sample.css">
+    	
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <title>チョッパーを救え</title>
+
+</head>
+
+
+
+
+<body class="body">
+
+    <header>
+        <h1 class="h1">チョッパーを救え</h1>
+    </header>
+  <img src="./img/main-img.png" alt="main-img"> 
+
+  <h2 class="h2">ルール</h2>
+  <p></p>
+  <p>キャラクターを選んでじゃんけん</p>
+  <p>勝ったほうが先行</p>
+  <p>カードの裏に隠れるチョッパーを交互に探そう</p>
+  <p>ルフィを見つけたら勝ち！</p>
+  <p>海軍大将に見つかったら負け！</p>
+  
+  <h3 class="h3">じゃんけん</h3>
+    <p><img id="jankenpon" src="./img/jyanken.png" width="200" height="200"></p>
+    <div class="btn">
+        <button onclick="R_Click(0);" class="btn1"> グー</button>
+        <button onclick="R_Click(1);"class="btn2"> チョキ</button>
+        <button onclick="R_Click(2);"class="btn3"> パー</button>
+
+        <p><img id="jankenpon2" src="./img/jyanken3.png" width="200" height="200"></p>
+       <div class="kouka">
+        <div id="Rejan1"></div>
+        <div id="Rejan2"></div>
+    </div>
+    </div>
+    
+    <h4 class="h4">隠れるチョッパーを探せ</h4>
+    <div id="game-container" class="game">
+        <div class="card" data-id="1"></div>
+        <div class="card" data-id="2"></div>
+        <div class="card" data-id="3"></div>
+        <div class="card" data-id="4"></div>
+        <div class="card" data-id="5"></div>
+        <div class="card" data-id="6"></div>
+        <div class="card" data-id="7"></div>
+        <div class="card" data-id="8"></div>
+        <div class="card" data-id="9"></div>
+        <div class="card" data-id="10"></div>
+        <div class="card" data-id="11"></div>
+        <div class="card" data-id="12"></div>
+        <div class="card" data-id="13"></div>
+        <div class="card" data-id="14"></div>
+        <div class="card" data-id="15"></div>
+        <div class="card" data-id="16"></div>
+      </div>
+      
+    
+      <div id="kekka-img" class="kekka-img"></div>
+      <button id="restart-button" class="restart-btn">リセット</button>
+      
+    <footer></footer>
+ <script>
+   
+
+   let janken = ['グー','チョキ','パー'];
+
+function R_Click(p_janken_r) {
+let janken = ['グー','チョキ','パー'];//"janken"リスト
+let janken_r = Math.floor( Math.random() * 3);//乱数
+
+let p_janken = ['グー','チョキ','パー'];//"プレイヤーjanken"りすと
+
+
+if (janken_r === p_janken_r) {
+               Result_end = "あいこ、もう一回です";
+           } else if(p_janken_r === 0 && janken_r === 1) {
+               Result_end = "ゾロが先行";
+           }else if(p_janken_r === 1 && janken_r === 2) {
+               Result_end = "ゾロが先行";
+           }else if(p_janken_r === 2 && janken_r === 0) {
+               Result_end = "ゾロが先行";
+           }else {
+               Result_end = "サンジが先行";
+           }
+
+           //結果
+           document.getElementById("jankenpon").src="./img/jyanken" + p_janken_r + ".png";
+           document.getElementById("Rejan1").innerHTML = p_janken[p_janken_r] +"を選択しました。勝負の結果は・・・？";
+           document.getElementById("Rejan2").innerHTML = "サンジが" + janken[janken_r] + Result_end;
+           document.getElementById("jankenpon2").src="./img/jyanken" + janken_r + ".png";
+       }
+
+//ページ開いたら関数開始
+/*
+$(document).ready(function(){
+    var wrongCards = []; 
+//はずれ
+while(wrongCards.length < 3){
+    var randomId = Math.floor(Math.random() * 15) + 1; // 1から15までの乱数
+    if (!wrongCards.includes(randomId)) {
+      wrongCards.push(randomId);
+}
+}
+// カードを生成し、はずれカードのクラスを追加する
+for (var i = 1; i <= 15; i++) {
+    var card = $('<div class="card" data-id="' + i + '"></div>');
+    if (wrongCards.includes(i)) {
+      card.addClass('wrong');
+    }
+    $('#game-container').append(card);
+  }
+ // カードをめくる処理
+ $('.card').click(function() {
+    var cardId = $(this).data('id');
+    $(this).addClass('open');
+    
+    // はずれカードの場合
+    if ($(this).hasClass('wrong')) {
+      alert('ゲームオーバー');
+      // ここでゲームオーバーの処理を追加する
+    }
+  });
+});
+*/
+// JavaScript (script.js)
+
+$(document).ready(function() {
+      var winCount = 0;
+      var loseCount = 0;
+
+      function restartGame() {
+        $('.card').removeClass('win lose continue');
+        $('.card').on('click', cardClickHandler);
+        $('#kekka-img').empty(); // 画像をクリア
+        winCount = 0; // 勝ち数をリセット
+        loseCount = 0; // 負け数をリセット
+      }
+
+      function cardClickHandler() {
+        var randomNumber = Math.random();
+        if (winCount < 1 && randomNumber < 0.1) {
+          $(this).addClass('win');
+          winCount++;
+        } else if (loseCount < 1 && randomNumber >= 0.1 && randomNumber < 0.2) {
+          $(this).addClass('lose');
+          loseCount++;
+        } else {
+          $(this).addClass('continue');
+        }
+
+        if (winCount === 1 || loseCount === 1) {
+          $('.card').off('click');
+          if (winCount === 1) {
+            $('#kekka-img').append('<img src="./img/win.png" alt="勝ちの画像" width="700" height="400">');
+          } else if (loseCount === 1) {
+            $('#kekka-img').append('<img src="./img/lose.png" alt="負けの画像" width="700" height="400">');
+          }
+        }
+      }
+
+      $('#restart-button').on('click', restartGame);
+      restartGame(); // ゲームを初期化
+    });
+
+   
+    </script>
+\</body>
+
+</html
